@@ -1,4 +1,4 @@
-# ⚡ CYSIC Phase 2 Auto Setup
+# ⚡ CYSIC Phase 3 Auto Setup
 Welcome to the **Unofficial Cysic Genesis Node Auto Setup** — built by **Saint Khen (@admirkhen)** to make your late entry smooth and blessed.
 
 This script helps you set up a **Cysic Verifier** (lightweight) or **Prover** (heavy-duty) node in seconds. Designed for **Termux**, **low RAM Linux**, or full servers.
