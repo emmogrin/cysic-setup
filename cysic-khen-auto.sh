@@ -4,7 +4,7 @@
 bold() { echo -e "\e[1m$1\e[0m"; }
 
 clear
-bold "🕊️  Saint Khen admirkhen welcomes you."
+bold "🕊️  Saint Khen @admirkhen welcomes you."
 
 echo ""
 echo "Choose your node type:"
@@ -57,23 +57,21 @@ fi
 echo ""
 if [ "$choice" == "1" ]; then
   bold "🌱 Setting up the Verifier..."
-  wget https://github.com/Cysic-VDF/phase2-genesis-verifier/releases/latest/download/setup.sh -O setup.sh
-  chmod +x setup.sh
-  bash setup.sh "$reward_address"
-  cd phase2-genesis-verifier || exit
-  nohup bash start.sh > ../cysic.log 2>&1 &
+  curl -L https://github.com/cysic-labs/phase2_libs/releases/download/v1.0.0/setup_linux.sh > ~/setup_linux.sh
+  bash ~/setup_linux.sh "$reward_address"
+  cd ~/cysic-verifier || exit
+  nohup bash start.sh > ~/cysic.log 2>&1 &
 else
   bold "🧠 Setting up the Prover..."
-  wget https://github.com/Cysic-VDF/phase2-genesis-prover/releases/latest/download/setup.sh -O setup.sh
-  chmod +x setup.sh
-  bash setup.sh "$reward_address"
-  cd phase2-genesis-prover || exit
-  nohup bash start.sh > ../cysic.log 2>&1 &
+  curl -L https://github.com/cysic-labs/phase2_libs/releases/download/v1.0.0/setup_prover.sh > ~/setup_prover.sh
+  bash ~/setup_prover.sh "$reward_address"
+  cd ~/cysic-prover || exit
+  nohup bash start.sh > ~/cysic.log 2>&1 &
 fi
 
 echo ""
 bold "✅ Node is running in the background."
-echo "📄 Check logs with: tail -f cysic.log"
+echo "📄 To check logs: tail -f \$HOME/cysic.log"
 echo ""
 bold "Saint Khen blesses your late entry 🙌"
-echo "Follow @admirkhen on X: https://x.com/admirkhen"
+echo "Follow me on X: https://x.com/admirkhen"
