@@ -39,7 +39,7 @@ Then let the blessings begin.
 
 📄 View Logs
 ```
-tail -f cysic.log
+tail -f $HOME/cysic.log
 ```
 Stop anytime with:
 ```
