@@ -73,16 +73,9 @@ else
   bold "⚙️  Setting up Phase 3 Prover..."
   curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/setup_prover.sh > ~/setup_prover.sh
   chmod +x ~/setup_prover.sh
-  bash ~/setup_prover.sh "$reward_address"
-  
-  # Write RPC URL to config
-  cd ~/cysic-prover || exit
-  if [[ -f config.toml ]]; then
-    sed -i "s|rpc_url = .*|rpc_url = \"$rpc_url\"|" config.toml
-  else
-    echo "❌ config.toml not found. Exiting."
-    exit 1
-  fi
+  bash ~/setup_prover.sh "$reward_address" "$rpc_url"
+
+  cd ~/cysic-prover || { echo "❌ Prover directory not found. Setup failed."; exit 1; }
 
   nohup bash start.sh > $HOME/cysic.log 2>&1 &
 fi
