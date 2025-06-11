@@ -68,21 +68,41 @@ if [ "$choice" == "1" ]; then
   chmod +x ~/setup_linux.sh
   bash ~/setup_linux.sh "$reward_address"
   cd ~/cysic-verifier || exit
-  nohup bash start.sh > $HOME/cysic.log 2>&1 &
+  nohup bash start.sh > $HOME/cysic-verifier.log 2>&1 &
+  log_file="cysic-verifier.log"
+
+  # Auto-restart using crontab
+  cron_entry="@reboot cd \$HOME/cysic-verifier && nohup bash start.sh > \$HOME/cysic-verifier.log 2>&1 &"
 else
   bold "⚙️  Setting up Phase 3 Prover..."
   curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/setup_prover.sh > ~/setup_prover.sh
   chmod +x ~/setup_prover.sh
   bash ~/setup_prover.sh "$reward_address" "$rpc_url"
-
   cd ~/cysic-prover || { echo "❌ Prover directory not found. Setup failed."; exit 1; }
+  nohup bash start.sh > $HOME/cysic-prover.log 2>&1 &
+  log_file="cysic-prover.log"
 
-  nohup bash start.sh > $HOME/cysic.log 2>&1 &
+  # Auto-restart using crontab
+  cron_entry="@reboot cd \$HOME/cysic-prover && nohup bash start.sh > \$HOME/cysic-prover.log 2>&1 &"
 fi
+
+# Install crontab if missing and add entry
+if ! command -v crontab >/dev/null 2>&1; then
+  echo "Installing cronie or cron..."
+  if command -v apt >/dev/null 2>&1; then
+    apt install -y cron
+    service cron start
+  elif command -v pkg >/dev/null 2>&1; then
+    pkg install -y cronie
+    crond
+  fi
+fi
+
+(crontab -l 2>/dev/null; echo "$cron_entry") | crontab -
 
 echo ""
 bold "✅ Node is running in the background."
-echo "📄 To view logs anytime: tail -f \$HOME/cysic.log"
+echo "📄 To view logs anytime: tail -f \$HOME/$log_file"
 echo ""
 bold "Saint Khen blesses your late entry 🙌"
 echo "Follow @admirkhen on X: https://x.com/admirkhen"
